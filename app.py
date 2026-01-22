@@ -312,18 +312,22 @@ with gr.Blocks(title="Lung Tissue Analysis Tool", theme=gr.themes.Base(), css=cu
                 elem_classes="upload-box"
             )
 
-            gr.Markdown("### Sample Images")
-            sample_dropdown = gr.Dropdown(
-                choices=["Select sample...", "Adenocarcinoma", "Benign Tissue", "Squamous Cell Carcinoma"],
-                label="Quick Test",
-                value="Select sample..."
-            )
-
             analyze_btn = gr.Button(
                 "ANALYZE",
                 variant="primary",
                 elem_classes="primary-btn",
                 size="lg"
+            )
+
+            gr.Markdown("### Sample Images")
+            gr.Examples(
+                examples=[
+                    "test_images/adenocarcinoma.jpg",
+                    "test_images/benign_tissue.png",
+                    "test_images/squamous_cell_carcinoma.png"
+                ],
+                inputs=input_image,
+                label="Click to load sample"
             )
 
         with gr.Column(scale=1):
