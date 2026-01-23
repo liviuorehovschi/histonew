@@ -593,10 +593,10 @@ button.primary:hover, button[variant="primary"]:hover {
 """
 
 # ============================================================
-# BOOT SCREEN HTML
+# BOOT SCREEN HTML (no script - JS handled separately)
 # ============================================================
 boot_screen_html = """
-<div class="sig-overlay" id="bootScreen">
+<div class="sig-overlay drawing" id="bootScreen">
     <svg viewBox="200 80 520 120" style="width: 80vw; max-width: 500px; height: auto;" fill="none">
         <path class="sig-stroke s1" d="M220.228 124.394C216.295 136.784 197.467 151.923 213.286 164.067C233.494 179.581 311.081 114.354 287.264 97.9612C267.04 84.0407 230.956 101.639 227.963 116.478" />
         <path class="sig-stroke s2" d="M275.112 144.263C303.698 122.796 289.382 147.552 285.867 155.813C283.982 160.244 311.078 154.469 314.689 153.41" />
@@ -614,15 +614,26 @@ boot_screen_html = """
         <path class="sig-stroke s14" d="M660.543 135.24C663.427 135.24 666.987 132.79 669 131.565" />
     </svg>
 </div>
-<script>
-(function() {
-    const boot = document.getElementById('bootScreen');
-    if (!boot) return;
-    setTimeout(() => boot.classList.add('drawing'), 50);
-    setTimeout(() => boot.classList.add('fading'), 1400);
-    setTimeout(() => boot.classList.add('hidden'), 2200);
-})();
-</script>
+"""
+
+# Boot screen JavaScript (executed via Gradio's js parameter)
+boot_screen_js = """
+function() {
+    // Wait for DOM to be ready then animate boot screen
+    const initBoot = () => {
+        const boot = document.getElementById('bootScreen');
+        if (boot) {
+            setTimeout(() => boot.classList.add('fading'), 1400);
+            setTimeout(() => boot.style.display = 'none', 2200);
+        }
+    };
+    if (document.readyState === 'complete') {
+        initBoot();
+    } else {
+        window.addEventListener('load', initBoot);
+    }
+    return [];
+}
 """
 
 # ============================================================
@@ -770,6 +781,7 @@ with gr.Blocks(
     title="Histomancer - AI Lung Cancer Classifier",
     theme=gr.themes.Base(),
     css=custom_css,
+    js=boot_screen_js,
     head="""
     <link rel="icon" type="image/x-icon" href="https://huggingface.co/spaces/liviuorehovschi/histomancer/resolve/main/histo.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
