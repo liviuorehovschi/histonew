@@ -123,7 +123,7 @@ def analyze_image(image: Image.Image):
 # CUSTOM CSS - COMPLETE REDESIGN
 # ============================================================
 custom_css = """
-/* ===== BOOT SCREEN ANIMATION ===== */
+/* ===== BOOT SCREEN ANIMATION (Pure CSS - no JS needed) ===== */
 .sig-overlay {
     position: fixed;
     inset: 0;
@@ -132,14 +132,15 @@ custom_css = """
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.8s ease-out;
+    /* Auto fade out after animation completes */
+    animation: bootFadeOut 0.8s ease-out 2.2s forwards;
 }
-.sig-overlay.fading {
-    opacity: 0;
-    pointer-events: none;
-}
-.sig-overlay.hidden {
-    display: none;
+@keyframes bootFadeOut {
+    to {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
 }
 .sig-stroke {
     fill: none;
@@ -148,24 +149,22 @@ custom_css = """
     stroke-linecap: round;
     stroke-dasharray: 500;
     stroke-dashoffset: 500;
-}
-.sig-overlay.drawing .sig-stroke {
     animation: drawStroke 0.07s ease-out forwards;
 }
-.sig-overlay.drawing .s1 { animation-delay: 0s; }
-.sig-overlay.drawing .s2 { animation-delay: 0.07s; }
-.sig-overlay.drawing .s3 { animation-delay: 0.16s; }
-.sig-overlay.drawing .s4 { animation-delay: 0.23s; }
-.sig-overlay.drawing .s5 { animation-delay: 0.32s; }
-.sig-overlay.drawing .s6 { animation-delay: 0.39s; }
-.sig-overlay.drawing .s7 { animation-delay: 0.48s; }
-.sig-overlay.drawing .s8 { animation-delay: 0.55s; }
-.sig-overlay.drawing .s9 { animation-delay: 0.64s; }
-.sig-overlay.drawing .s10 { animation-delay: 0.73s; }
-.sig-overlay.drawing .s11 { animation-delay: 0.82s; }
-.sig-overlay.drawing .s12 { animation-delay: 0.89s; }
-.sig-overlay.drawing .s13 { animation-delay: 0.96s; }
-.sig-overlay.drawing .s14 { animation-delay: 1.03s; }
+.sig-stroke.s1 { animation-delay: 0.1s; }
+.sig-stroke.s2 { animation-delay: 0.17s; }
+.sig-stroke.s3 { animation-delay: 0.26s; }
+.sig-stroke.s4 { animation-delay: 0.33s; }
+.sig-stroke.s5 { animation-delay: 0.42s; }
+.sig-stroke.s6 { animation-delay: 0.49s; }
+.sig-stroke.s7 { animation-delay: 0.58s; }
+.sig-stroke.s8 { animation-delay: 0.65s; }
+.sig-stroke.s9 { animation-delay: 0.74s; }
+.sig-stroke.s10 { animation-delay: 0.83s; }
+.sig-stroke.s11 { animation-delay: 0.92s; }
+.sig-stroke.s12 { animation-delay: 0.99s; }
+.sig-stroke.s13 { animation-delay: 1.06s; }
+.sig-stroke.s14 { animation-delay: 1.13s; }
 @keyframes drawStroke {
     to { stroke-dashoffset: 0; }
 }
@@ -593,10 +592,10 @@ button.primary:hover, button[variant="primary"]:hover {
 """
 
 # ============================================================
-# BOOT SCREEN HTML (no script - JS handled separately)
+# BOOT SCREEN HTML (Pure CSS animation - no JS needed)
 # ============================================================
 boot_screen_html = """
-<div class="sig-overlay drawing" id="bootScreen">
+<div class="sig-overlay" id="bootScreen">
     <svg viewBox="200 80 520 120" style="width: 80vw; max-width: 500px; height: auto;" fill="none">
         <path class="sig-stroke s1" d="M220.228 124.394C216.295 136.784 197.467 151.923 213.286 164.067C233.494 179.581 311.081 114.354 287.264 97.9612C267.04 84.0407 230.956 101.639 227.963 116.478" />
         <path class="sig-stroke s2" d="M275.112 144.263C303.698 122.796 289.382 147.552 285.867 155.813C283.982 160.244 311.078 154.469 314.689 153.41" />
@@ -614,26 +613,6 @@ boot_screen_html = """
         <path class="sig-stroke s14" d="M660.543 135.24C663.427 135.24 666.987 132.79 669 131.565" />
     </svg>
 </div>
-"""
-
-# Boot screen JavaScript (executed via Gradio's js parameter)
-boot_screen_js = """
-function() {
-    // Wait for DOM to be ready then animate boot screen
-    const initBoot = () => {
-        const boot = document.getElementById('bootScreen');
-        if (boot) {
-            setTimeout(() => boot.classList.add('fading'), 1400);
-            setTimeout(() => boot.style.display = 'none', 2200);
-        }
-    };
-    if (document.readyState === 'complete') {
-        initBoot();
-    } else {
-        window.addEventListener('load', initBoot);
-    }
-    return [];
-}
 """
 
 # ============================================================
@@ -781,7 +760,6 @@ with gr.Blocks(
     title="Histomancer - AI Lung Cancer Classifier",
     theme=gr.themes.Base(),
     css=custom_css,
-    js=boot_screen_js,
     head="""
     <link rel="icon" type="image/x-icon" href="https://huggingface.co/spaces/liviuorehovschi/histomancer/resolve/main/histo.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
