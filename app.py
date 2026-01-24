@@ -15,7 +15,7 @@ CLASS_LABELS = {
     'lung_scc': 'Lung Squamous Cell Carcinoma'
 }
 
-print("[INFO] Loading model at startup v2...")
+print("[INFO] Loading model at startup v3...")
 model = tf.keras.models.load_model(MODEL_PATH, compile=False, safe_mode=False)
 print("[SUCCESS] Model loaded once and ready!")
 
