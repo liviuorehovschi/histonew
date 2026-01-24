@@ -24,7 +24,7 @@ WORKDIR /app/frontend
 RUN npm ci --production=false
 
 COPY frontend/ ./
-RUN npm run build
+RUN chmod -R +x node_modules/.bin && npm run build
 
 # Back to app root
 WORKDIR /app
