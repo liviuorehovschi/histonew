@@ -137,13 +137,52 @@ body, .gradio-container {
 }
 footer { display: none !important; }
 
-/* Tabs */
+/* Fixed header with logo */
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: #09090b;
+    border-bottom: 1px solid #27272a;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    z-index: 1000;
+}
+.fixed-header a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #fafafa;
+}
+.fixed-header img {
+    width: 32px;
+    height: 32px;
+}
+.fixed-header span {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Tabs - sticky below header */
+.tabs {
+    position: sticky !important;
+    top: 56px !important;
+    z-index: 999 !important;
+    background: #09090b !important;
+}
 .tab-nav, [role="tablist"] {
     background: #18181b !important;
     border-bottom: 1px solid #27272a !important;
     justify-content: center !important;
     gap: 0 !important;
     padding: 0 !important;
+    position: sticky !important;
+    top: 56px !important;
+    z-index: 999 !important;
 }
 .tab-nav button, [role="tab"] {
     background: transparent !important;
@@ -161,6 +200,9 @@ footer { display: none !important; }
     color: #fafafa !important;
     border-bottom-color: #fafafa !important;
 }
+
+/* Add padding to body for fixed header */
+.gradio-container > .main { padding-top: 56px !important; }
 
 /* Cards */
 .gr-panel, .gr-box, .gr-form {
@@ -328,7 +370,17 @@ about_html = '''
 # ============================================================
 # BUILD APP
 # ============================================================
+header_html = '''
+<div class="fixed-header">
+    <a href="/" onclick="document.querySelector('[role=tab]').click(); return false;">
+        <img src="https://huggingface.co/spaces/liviuorehovschi/histomancer/resolve/main/histo.ico" alt="Histomancer">
+        <span>Histomancer</span>
+    </a>
+</div>
+'''
+
 with gr.Blocks(css=css, title="Histomancer") as demo:
+    gr.HTML(header_html)
     gr.HTML(watermark)
 
     with gr.Tabs():
