@@ -644,43 +644,27 @@ watermark_html = """
 home_html = """
 <div class="home-wrapper">
     <div class="hero">
+        <img src="https://huggingface.co/spaces/liviuorehovschi/histomancer/resolve/main/histo.ico" alt="Histomancer" style="width: 80px; height: 80px; margin-bottom: 24px;">
         <h1>Histomancer</h1>
-        <p>A tool for classifying lung histopathology images. Analyzes tissue slides and predicts whether a sample corresponds to adenocarcinoma, squamous cell carcinoma, or normal lung tissue.</p>
-        <div class="hero-stats">
-            <div class="stat">
-                <div class="stat-value">3</div>
-                <div class="stat-label">Classes</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">25K+</div>
-                <div class="stat-label">Training Images</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">2</div>
-                <div class="stat-label">Datasets</div>
-            </div>
-        </div>
+        <p>A tool for classifying lung histopathology images. It analyzes H&E stained tissue slides and predicts whether a sample corresponds to lung adenocarcinoma, lung squamous cell carcinoma, or normal (benign) lung tissue.</p>
+        <p style="font-size: 15px; margin-top: 16px;">The goal is not to automate diagnosis or replace clinical judgment. It was built to explore whether modern convolutional neural networks can learn histologically meaningful patterns and present those predictions in a way that is inspectable, explainable, and usable in real time.</p>
     </div>
     <div class="features">
         <div class="features-header">
-            <h2>What It Does</h2>
-            <p>Not meant to automate diagnosis or replace clinical judgment. Built to explore how models interpret histology.</p>
+            <h2>What the Model Does</h2>
         </div>
         <div class="features-grid">
             <div class="feature">
-                <div class="feature-icon">&#128300;</div>
                 <h3>Classification</h3>
-                <p>Classifies lung histopathology images into adenocarcinoma, squamous cell carcinoma, or normal tissue. Produces a predicted class with confidence score.</p>
+                <p>Classifies lung histopathology images into: Adenocarcinoma, Squamous cell carcinoma, Normal lung tissue. Produces a single predicted class with a confidence score.</p>
             </div>
             <div class="feature">
-                <div class="feature-icon">&#129504;</div>
                 <h3>Explainability</h3>
-                <p>Generates Grad-CAM and saliency map visualizations. These often align with known histopathological markers like glandular structures or keratin pearls.</p>
+                <p>Generates Grad-CAM (region level attention) and saliency maps (pixel level sensitivity). These visualizations often align with known histopathological markers.</p>
             </div>
             <div class="feature">
-                <div class="feature-icon">&#127760;</div>
                 <h3>Transparency</h3>
-                <p>Public, interactive, and inspectable. Built to explore whether modern CNNs can learn histologically meaningful patterns and present them clearly.</p>
+                <p>Most academic models remain locked in papers or notebooks, and many commercial tools are proprietary and opaque. Histomancer exists in between: public, interactive, and transparent.</p>
             </div>
         </div>
     </div>
@@ -691,79 +675,80 @@ about_html = """
 <div class="about-wrapper">
     <div class="about-header">
         <h1>About Histomancer</h1>
-        <p>A tool for classifying lung histopathology images. Analyzes tissue slides stained with H&E and predicts whether a sample corresponds to lung adenocarcinoma, lung squamous cell carcinoma, or normal lung tissue.</p>
     </div>
 
     <div class="about-section">
-        <h2>What It Is</h2>
-        <h3>Public, interactive, and transparent</h3>
-        <p>The goal is not to automate diagnosis or replace clinical judgment. It was built to explore whether modern convolutional neural networks can learn histologically meaningful patterns and present those predictions in a way that is inspectable, explainable, and usable in real time.</p>
+        <h2>What Histomancer Is</h2>
+        <p>Histomancer is a tool for classifying lung histopathology images. It analyzes H&E stained tissue slides and predicts whether a sample corresponds to lung adenocarcinoma, lung squamous cell carcinoma, or normal (benign) lung tissue.</p>
+        <p>The goal of Histomancer is not to automate diagnosis or replace clinical judgment. It was built to explore whether modern convolutional neural networks can learn histologically meaningful patterns and present those predictions in a way that is inspectable, explainable, and usable in real time.</p>
         <p>Most academic models remain locked in papers or notebooks, and many commercial tools are proprietary and opaque. Histomancer exists in between: public, interactive, and transparent.</p>
     </div>
 
     <div class="about-section">
-        <h2>Why It Was Made</h2>
-        <h3>Three questions</h3>
-        <p>Lung cancer diagnosis ultimately depends on histopathological examination, a process that is time intensive and subject to variability. Deep learning models have shown strong performance on histology images but often without interpretability or public accessibility.</p>
-        <p>Histomancer was created to answer:</p>
+        <h2>Why Histomancer Was Made</h2>
+        <p>Lung cancer diagnosis ultimately depends on histopathological examination, a process that is time intensive and subject to variability, especially as biopsy volume increases. At the same time, deep learning models have shown strong performance on histology images but often without interpretability or public accessibility.</p>
+        <p>Histomancer was created to answer three questions:</p>
         <ul>
             <li>Can a modern CNN reliably distinguish major lung cancer subtypes from histology images?</li>
             <li>Does the model's attention align with known pathological features?</li>
             <li>Can this be explored through a simple, public interface rather than a closed research pipeline?</li>
         </ul>
+        <p>The project prioritizes clarity and explainability over raw automation.</p>
     </div>
 
     <div class="about-section">
-        <h2>What the Model Does</h2>
-        <h3>Classification with explainability</h3>
-        <p>Classifies lung histopathology images into:</p>
-        <ul>
-            <li><strong>Adenocarcinoma</strong></li>
-            <li><strong>Squamous cell carcinoma</strong></li>
-            <li><strong>Normal lung tissue</strong></li>
-        </ul>
-        <p>Produces a single predicted class with a confidence score. Generates Grad-CAM (region level attention) and saliency maps (pixel level sensitivity).</p>
+        <h2>About Me and My Role</h2>
+        <p>I built Histomancer end to end: model development, training, evaluation, deployment, and frontend integration.</p>
+        <p>My background spans machine learning, natural sciences, and software engineering, and this project reflects my interest in how these systems behave when exposed to real biological structure rather than abstract benchmarks.</p>
+        <p>Rather than optimizing only for accuracy, I focused on: dataset composition and generalizability, interpretability through visual explanations, real world deployment constraints, and responsible framing in medical contexts.</p>
+    </div>
+
+    <div class="about-section">
+        <h2>What the Model Does (Capabilities)</h2>
+        <p>Classifies lung histopathology images into: Adenocarcinoma, Squamous cell carcinoma, Normal lung tissue.</p>
+        <p>Produces a single predicted class with a confidence score.</p>
+        <p>Generates explainability visualizations: Grad-CAM (region level attention), Saliency maps (pixel level sensitivity).</p>
         <p>In many cases, these visualizations align with known histopathological markers: glandular structures in adenocarcinoma, keratinization and keratin pearls in squamous carcinoma, diffuse or low intensity attention in benign tissue.</p>
     </div>
 
     <div class="about-section">
         <h2>Technical Overview</h2>
-        <h3>EfficientNet B0</h3>
-        <p>Model: EfficientNet B0 (CNN). Framework: TensorFlow / Keras. Input: Histopathology images (resized, normalized). Output: Class prediction + confidence score. Explainability: Grad-CAM and saliency mapping. Training: Transfer learning, fine tuned for lung histology.</p>
-        <div class="tech-tags">
-            <span class="tech-tag">TensorFlow</span>
-            <span class="tech-tag">Keras</span>
-            <span class="tech-tag">EfficientNet B0</span>
-            <span class="tech-tag">Gradio</span>
-            <span class="tech-tag">OpenCV</span>
-        </div>
+        <p>Model: EfficientNet B0 (convolutional neural network)</p>
+        <p>Framework: TensorFlow / Keras</p>
+        <p>Input: Histopathology images (resized and normalized to match training conditions)</p>
+        <p>Output: Class prediction + confidence score</p>
+        <p>Explainability: Grad-CAM and saliency mapping computed on demand</p>
+        <p>The model was trained using transfer learning and fine tuned for lung histology classification.</p>
     </div>
 
     <div class="about-section">
-        <h2>Datasets</h2>
-        <h3>Combined dataset approach</h3>
-        <p><strong>LC25000:</strong> Large histopathology dataset (~25,000 images) derived from a smaller number of real samples. Expanded via synthetic augmentation. Provides scale and stability, but its synthetic nature makes generalization tricky. <a href="https://doi.org/10.57702/cfrwm2gi" target="_blank">Dataset link</a></p>
-        <p><strong>LungHist700:</strong> Smaller dataset (691 images) with real clinical histopathology samples. Higher resolution and natural variability. Added to counterbalance the synthetic nature of LC25000. <a href="https://doi.org/10.1038/s41597-024-03944-3" target="_blank">Dataset link</a></p>
+        <h2>Datasets Used (With Important Caveats)</h2>
+        <p>Histomancer was trained using a combined dataset approach, which is essential to understand its strengths and limitations.</p>
+        <p><strong>LC25000:</strong> Large histopathology dataset (~25,000 images). Derived from a much smaller number of real samples. Expanded via heavy synthetic augmentation (rotations, flips, contrast changes, zooms, noise). Balanced across classes. This dataset provides scale and stability, but its synthetic nature makes generalization tricky. <a href="https://doi.org/10.57702/cfrwm2gi" target="_blank">Dataset link</a></p>
+        <p><strong>LungHist700:</strong> Smaller dataset (691 images). Real clinical histopathology samples. Higher resolution and natural variability. Includes adenocarcinoma, squamous carcinoma, and normal lung tissue. This dataset was added specifically to counterbalance the synthetic nature of LC25000 and improve real world relevance. <a href="https://doi.org/10.1038/s41597-024-03944-3" target="_blank">Dataset link</a></p>
     </div>
 
     <div class="about-section">
-        <h2>Limitations</h2>
-        <h3>Intentionally disclosed</h3>
+        <h2>Important Limitations and Shortcomings</h2>
+        <p>Some limitations are fundamental and intentionally disclosed:</p>
         <ul>
             <li>A significant portion of training data is synthetically augmented</li>
-            <li>Augmentation cannot fully replicate inter patient variability</li>
-            <li>Differences in staining protocols or imaging equipment affect results</li>
-            <li>Confidence scores are softmax probabilities, not calibrated uncertainty estimates</li>
+            <li>Augmentation cannot fully replicate: inter patient variability, differences in staining protocols, differences in slide preparation or imaging equipment</li>
+            <li>Confidence scores are derived from softmax probabilities and are not calibrated uncertainty estimates</li>
             <li>The model has not been externally validated on datasets from multiple hospitals</li>
         </ul>
-        <p>Because of this, Histomancer should be viewed as a research and demonstration tool, a learning aid, and an exploration of explainable approaches in pathology. Not as a clinical diagnostic system.</p>
+        <p>Because of this, Histomancer should be viewed as: a research and demonstration tool, a learning aid, an exploration of explainable approaches in pathology. Not as a clinical diagnostic system.</p>
     </div>
 
     <div class="about-section">
-        <h2>About the Author</h2>
+        <h2>Responsible Use and Framing</h2>
+        <p>Histomancer is designed to support exploration and understanding, not to replace expert interpretation.</p>
+        <p>Predictions should always be interpreted cautiously, especially in borderline cases where histological features overlap. Any real clinical application would require additional validation, uncertainty estimation, and regulatory review.</p>
+    </div>
+
+    <div class="about-section">
         <div class="author-card">
             <h4>Liviu Orehovschi</h4>
-            <p>I built Histomancer from start to finish: model development, training, evaluation, deployment, and frontend integration. My background spans machine learning, natural sciences, and software engineering.</p>
             <div class="author-links">
                 <a href="https://orehovschi.com" target="_blank">Portfolio</a>
                 <a href="https://github.com/liviuorehovschi" target="_blank">GitHub</a>
