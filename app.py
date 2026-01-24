@@ -134,21 +134,21 @@ custom_css = """
 
 /* ===== ROOT VARIABLES ===== */
 :root {
-    --bg: #09090b;
-    --bg-subtle: #18181b;
-    --bg-muted: #27272a;
-    --border: #3f3f46;
-    --border-subtle: #27272a;
+    --bg: #0a0a0a;
+    --bg-subtle: #141414;
+    --bg-muted: #1a1a1a;
+    --border: #262626;
+    --border-subtle: #1a1a1a;
     --text: #fafafa;
-    --text-muted: #a1a1aa;
-    --text-dim: #71717a;
-    --primary: #3b82f6;
-    --primary-hover: #2563eb;
-    --success: #22c55e;
-    --warning: #eab308;
-    --danger: #ef4444;
-    --radius: 12px;
-    --radius-sm: 8px;
+    --text-muted: #a3a3a3;
+    --text-dim: #737373;
+    --primary: #fafafa;
+    --primary-hover: #e5e5e5;
+    --success: #16a34a;
+    --warning: #ca8a04;
+    --danger: #dc2626;
+    --radius: 8px;
+    --radius-sm: 6px;
 }
 
 /* ===== GLOBAL ===== */
@@ -410,7 +410,7 @@ footer { display: none !important; }
 
 .gradio-container button.primary {
     background: var(--primary) !important;
-    color: white !important;
+    color: #0a0a0a !important;
     border: none !important;
     border-radius: var(--radius-sm) !important;
     padding: 12px 24px !important;
