@@ -1,2 +1,9 @@
 model/best_model_efficientnet.keras filter=lfs diff=lfs merge=lfs -text
 histo.ico filter=lfs diff=lfs merge=lfs -text
+frontend/node_modules/.bin/esbuild filter=lfs diff=lfs merge=lfs -text
+frontend/node_modules/@esbuild/darwin-x64/bin/esbuild filter=lfs diff=lfs merge=lfs -text
+frontend/node_modules/@rollup/rollup-darwin-x64/rollup.darwin-x64.node filter=lfs diff=lfs merge=lfs -text
+frontend/node_modules/@tailwindcss/oxide-darwin-x64/tailwindcss-oxide.darwin-x64.node filter=lfs diff=lfs merge=lfs -text
+frontend/node_modules/esbuild/bin/esbuild filter=lfs diff=lfs merge=lfs -text
+frontend/node_modules/fsevents/fsevents.node filter=lfs diff=lfs merge=lfs -text
+frontend/node_modules/lightningcss-darwin-x64/lightningcss.darwin-x64.node filter=lfs diff=lfs merge=lfs -text
