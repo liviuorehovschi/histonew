@@ -19,12 +19,9 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy frontend and build React app
-COPY frontend/package*.json ./frontend/
+COPY frontend/ ./frontend/
 WORKDIR /app/frontend
-RUN npm ci --production=false
-
-COPY frontend/ ./
-RUN chmod -R +x node_modules/.bin && npm run build
+RUN npm install && npx --yes vite build
 
 # Back to app root
 WORKDIR /app
