@@ -97,21 +97,32 @@ def generate_saliency(image: Image.Image) -> Image.Image:
 
 def analyze_image(image: Image.Image):
     if image is None:
-        return {}, None, None
+        return {}
     try:
         if not isinstance(image, Image.Image):
-            return {}, None, None
+            return {}
         if image.size[0] < 50 or image.size[1] < 50:
-            return {}, None, None
-        prediction = predict(image)
-        saliency = generate_saliency(image)
-        gradcam = generate_gradcam(image)
-        return prediction, saliency, gradcam
+            return {}
+        return predict(image)
     except Exception as e:
         print(f"[ERROR] Analysis failed: {str(e)}")
-        import traceback
-        traceback.print_exc()
-        return {}, None, None
+        return {}
+
+def get_gradcam(image: Image.Image):
+    if image is None:
+        return None
+    try:
+        return generate_gradcam(image)
+    except:
+        return None
+
+def get_saliency(image: Image.Image):
+    if image is None:
+        return None
+    try:
+        return generate_saliency(image)
+    except:
+        return None
 
 
 # ============================================================
@@ -814,27 +825,24 @@ with gr.Blocks(
 
                 with gr.Column(scale=1):
                     output_label = gr.Label(label="Classification", num_top_classes=3)
-                    gr.Markdown("""
-                    **Classes:**
-                    - **Adenocarcinoma** — Glandular cancer
-                    - **Squamous Cell** — Keratinizing cancer
-                    - **Normal** — Healthy tissue
-                    """)
 
-            gr.HTML('<div class="viz-section"><div class="viz-title">AI Explainability</div></div>')
-
-            with gr.Row():
-                saliency_output = gr.Image(type="pil", label="Saliency Map", height=280)
-                gradcam_output = gr.Image(type="pil", label="Grad-CAM", height=280)
+            with gr.Accordion("Explainability Visualizations", open=False):
+                with gr.Row():
+                    gradcam_btn = gr.Button("Generate Grad-CAM")
+                    saliency_btn = gr.Button("Generate Saliency Map")
+                with gr.Row():
+                    gradcam_output = gr.Image(type="pil", label="Grad-CAM", height=280)
+                    saliency_output = gr.Image(type="pil", label="Saliency Map", height=280)
 
             gr.HTML("""
             <div class="disclaimer">
-                <p><strong>Disclaimer:</strong> This is an educational demonstration. Not for clinical diagnostic use. Consult medical professionals for actual healthcare decisions.</p>
+                <p><strong>Disclaimer:</strong> This is for research and exploration, not clinical diagnosis. Consult medical professionals for healthcare decisions.</p>
             </div>
             """)
 
-            analyze_btn.click(fn=analyze_image, inputs=input_image, outputs=[output_label, saliency_output, gradcam_output])
-            input_image.change(fn=analyze_image, inputs=input_image, outputs=[output_label, saliency_output, gradcam_output])
+            analyze_btn.click(fn=analyze_image, inputs=input_image, outputs=output_label)
+            gradcam_btn.click(fn=get_gradcam, inputs=input_image, outputs=gradcam_output)
+            saliency_btn.click(fn=get_saliency, inputs=input_image, outputs=saliency_output)
 
         # ABOUT
         with gr.Tab("About"):
