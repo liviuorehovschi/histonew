@@ -118,53 +118,7 @@ def analyze_image(image: Image.Image):
 # CUSTOM CSS - MODERN MEDICAL AI DESIGN
 # ============================================================
 custom_css = """
-/* ===== HIDE GRADIO DEFAULT LOADING ===== */
-.gradio-container .wrap.default.svelte-1sk0pyu,
-.gradio-container .progress-text,
-.gradio-container > div:first-child:not(.tabs),
-#loading,
-.loading {
-    display: none !important;
-}
-
-/* ===== BOOT SCREEN ===== */
-.boot-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 99999;
-    background: #09090b;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: bootFadeOut 0.6s ease-out 2.4s forwards;
-}
-@keyframes bootFadeOut {
-    to { opacity: 0; visibility: hidden; pointer-events: none; }
-}
-.boot-sig {
-    fill: none;
-    stroke: #fafafa;
-    stroke-width: 4;
-    stroke-linecap: round;
-    stroke-dasharray: 500;
-    stroke-dashoffset: 500;
-    animation: sigDraw 0.08s ease-out forwards;
-}
-.boot-sig.p1 { animation-delay: 0.15s; }
-.boot-sig.p2 { animation-delay: 0.23s; }
-.boot-sig.p3 { animation-delay: 0.31s; }
-.boot-sig.p4 { animation-delay: 0.39s; }
-.boot-sig.p5 { animation-delay: 0.47s; }
-.boot-sig.p6 { animation-delay: 0.55s; }
-.boot-sig.p7 { animation-delay: 0.63s; }
-.boot-sig.p8 { animation-delay: 0.71s; }
-.boot-sig.p9 { animation-delay: 0.79s; }
-.boot-sig.p10 { animation-delay: 0.87s; }
-.boot-sig.p11 { animation-delay: 0.95s; }
-.boot-sig.p12 { animation-delay: 1.03s; }
-.boot-sig.p13 { animation-delay: 1.11s; }
-.boot-sig.p14 { animation-delay: 1.19s; }
-@keyframes sigDraw { to { stroke-dashoffset: 0; } }
+/* No boot screen - keeping it simple */
 
 /* ===== WATERMARK ===== */
 .watermark {
@@ -670,27 +624,6 @@ footer { display: none !important; }
 # ============================================================
 # HTML CONTENT
 # ============================================================
-boot_html = """
-<div class="boot-overlay">
-    <svg viewBox="200 80 520 120" style="width:min(70vw,400px);height:auto" fill="none">
-        <path class="boot-sig p1" d="M220.228 124.394C216.295 136.784 197.467 151.923 213.286 164.067C233.494 179.581 311.081 114.354 287.264 97.9612C267.04 84.0407 230.956 101.639 227.963 116.478"/>
-        <path class="boot-sig p2" d="M275.112 144.263C303.698 122.796 289.382 147.552 285.867 155.813C283.982 160.244 311.078 154.469 314.689 153.41"/>
-        <path class="boot-sig p3" d="M314.689 153.41C359.924 140.146 311.373 127.238 314.689 153.41Z"/>
-        <path class="boot-sig p4" d="M314.689 153.41C316.788 169.975 356.198 147.569 361.872 143.865"/>
-        <path class="boot-sig p5" d="M361.872 143.865C379.996 132.033 396.654 110.1 396.142 93.0151C395.587 74.4442 371.8 126.504 361.872 143.865Z"/>
-        <path class="boot-sig p6" d="M361.872 143.865C358.713 149.388 356.853 155.059 354.151 160.646C353.56 161.868 357.043 156.178 366.562 150.218C393.466 133.372 380.946 180.567 408.42 157.542"/>
-        <path class="boot-sig p7" d="M408.42 157.542C422.113 146.068 406.519 142.186 408.42 157.542Z"/>
-        <path class="boot-sig p8" d="M408.42 157.542C409.261 164.335 419.291 164.376 427.904 164.518C446.758 164.829 436.156 128.918 413.569 144.253"/>
-        <path class="boot-sig p9" d="M443.616 141.885C461.237 189.037 461.247 141.561 494.921 144.092"/>
-        <path class="boot-sig p10" d="M530.069 142.59C492.635 142.764 525.754 153.079 519.876 160.419C508.831 167.863 482.829 171.175 468.519 176"/>
-        <path class="boot-sig p11" d="M567.777 142.645C548.176 142.644 535.687 158.692 551.095 168.622C563.172 176.406 592.423 158.35 598.782 153.314"/>
-        <path class="boot-sig p12" d="M598.782 153.314C612.006 142.84 620.551 100.564 615.577 113.834C610.591 127.137 604.922 140.225 598.782 153.314Z"/>
-        <path class="boot-sig p13" d="M598.782 153.314C586.286 179.948 593.453 164.248 617.545 156.091C635.029 150.172 619.238 171.51 629.98 172.179C645.463 173.144 652.018 163.388 658.901 155.799"/>
-        <path class="boot-sig p14" d="M660.543 135.24C663.427 135.24 666.987 132.79 669 131.565"/>
-    </svg>
-</div>
-"""
-
 watermark_html = """
 <a href="https://orehovschi.com" target="_blank" class="watermark" title="orehovschi.com">
     <svg viewBox="200 80 520 120" fill="none"><path d="M220.228 124.394C216.295 136.784 197.467 151.923 213.286 164.067C233.494 179.581 311.081 114.354 287.264 97.9612C267.04 84.0407 230.956 101.639 227.963 116.478M275.112 144.263C303.698 122.796 289.382 147.552 285.867 155.813C283.982 160.244 311.078 154.469 314.689 153.41M314.689 153.41C359.924 140.146 311.373 127.238 314.689 153.41ZM314.689 153.41C316.788 169.975 356.198 147.569 361.872 143.865M361.872 143.865C379.996 132.033 396.654 110.1 396.142 93.0151C395.587 74.4442 371.8 126.504 361.872 143.865ZM361.872 143.865C358.713 149.388 356.853 155.059 354.151 160.646C353.56 161.868 357.043 156.178 366.562 150.218C393.466 133.372 380.946 180.567 408.42 157.542M408.42 157.542C422.113 146.068 406.519 142.186 408.42 157.542ZM408.42 157.542C409.261 164.335 419.291 164.376 427.904 164.518C446.758 164.829 436.156 128.918 413.569 144.253M443.616 141.885C461.237 189.037 461.247 141.561 494.921 144.092M530.069 142.59C492.635 142.764 525.754 153.079 519.876 160.419C508.831 167.863 482.829 171.175 468.519 176M567.777 142.645C548.176 142.644 535.687 158.692 551.095 168.622C563.172 176.406 592.423 158.35 598.782 153.314M598.782 153.314C612.006 142.84 620.551 100.564 615.577 113.834C610.591 127.137 604.922 140.225 598.782 153.314ZM598.782 153.314C586.286 179.948 593.453 164.248 617.545 156.091C635.029 150.172 619.238 171.51 629.98 172.179C645.463 173.144 652.018 163.388 658.901 155.799M660.543 135.24C663.427 135.24 666.987 132.79 669 131.565" stroke="#fafafa" stroke-width="4" stroke-linecap="round" fill="none"/></svg>
@@ -828,7 +761,6 @@ with gr.Blocks(
     head='<link rel="icon" href="https://huggingface.co/spaces/liviuorehovschi/histomancer/resolve/main/histo.ico">'
 ) as demo:
 
-    gr.HTML(boot_html)
     gr.HTML(watermark_html)
 
     with gr.Tabs():
