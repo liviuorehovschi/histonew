@@ -915,10 +915,7 @@ with gr.Blocks(
                         type="pil",
                         label="Upload Image",
                         height=300,
-                        sources=["upload", "clipboard"],
-                        show_download_button=False,
-                        show_share_button=False,
-                        interactive=True
+                        sources=["upload", "clipboard"]
                     )
                     analyze_btn = gr.Button("Analyze", variant="primary", size="lg")
 
