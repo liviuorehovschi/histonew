@@ -191,39 +191,41 @@ footer { display: none !important; }
 /* ===== TABS NAVIGATION ===== */
 .tabs { background: transparent !important; border: none !important; }
 
-.tab-nav {
+.tab-nav, div[role="tablist"] {
     background: var(--bg-subtle) !important;
-    border-bottom: 1px solid var(--border-subtle) !important;
+    border-bottom: 1px solid var(--border) !important;
     padding: 0 !important;
     gap: 0 !important;
     justify-content: center !important;
+    display: flex !important;
 }
 
-.tab-nav button {
+.tab-nav button, button[role="tab"] {
     background: transparent !important;
-    color: var(--text-muted) !important;
+    color: #e5e5e5 !important;
     border: none !important;
-    border-bottom: 2px solid transparent !important;
-    padding: 16px 32px !important;
+    border-bottom: 3px solid transparent !important;
+    padding: 18px 40px !important;
     margin: 0 !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.02em !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.03em !important;
     transition: all 0.2s !important;
+    text-transform: uppercase !important;
 }
 
-.tab-nav button:hover {
-    color: var(--text) !important;
-    background: var(--bg-muted) !important;
+.tab-nav button:hover, button[role="tab"]:hover {
+    color: #ffffff !important;
+    background: rgba(255,255,255,0.05) !important;
 }
 
-.tab-nav button.selected {
-    color: var(--primary) !important;
-    border-bottom-color: var(--primary) !important;
-    background: transparent !important;
+.tab-nav button.selected, button[role="tab"][aria-selected="true"] {
+    color: #ffffff !important;
+    border-bottom-color: #ffffff !important;
+    background: rgba(255,255,255,0.08) !important;
 }
 
-.tabitem { background: transparent !important; border: none !important; padding: 0 !important; }
+.tabitem, div[role="tabpanel"] { background: transparent !important; border: none !important; padding: 0 !important; }
 
 /* ===== HOME PAGE ===== */
 .home-wrapper {
@@ -442,20 +444,64 @@ footer { display: none !important; }
     border-radius: var(--radius) !important;
 }
 
-.gradio-container .image-container {
+/* Image upload and preview */
+.gradio-container .image-container,
+.gradio-container [data-testid="image"],
+.image-frame {
     background: var(--bg-subtle) !important;
-    border: 1px solid var(--border-subtle) !important;
+    border: 1px solid var(--border) !important;
     border-radius: var(--radius) !important;
+    min-height: 280px !important;
 }
 
-.gradio-container .upload-container {
+.gradio-container .image-container img,
+.gradio-container [data-testid="image"] img,
+.image-frame img {
+    max-height: 300px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+.gradio-container .upload-container,
+.gradio-container [data-testid="dropzone"] {
     border: 2px dashed var(--border) !important;
     border-radius: var(--radius) !important;
     background: var(--bg-subtle) !important;
+    min-height: 200px !important;
 }
 
-.gradio-container .upload-container:hover {
-    border-color: var(--primary) !important;
+.gradio-container .upload-container:hover,
+.gradio-container [data-testid="dropzone"]:hover {
+    border-color: #ffffff !important;
+    background: rgba(255,255,255,0.02) !important;
+}
+
+/* Remove any blue focus/accent colors */
+*:focus, *:focus-visible {
+    outline-color: #71717a !important;
+    box-shadow: none !important;
+}
+
+.gradio-container button:focus,
+.gradio-container input:focus {
+    outline: 2px solid #71717a !important;
+    outline-offset: 2px !important;
+    box-shadow: none !important;
+}
+
+/* Override Gradio blue accents */
+.gradio-container {
+    --color-accent: #ffffff !important;
+    --color-accent-soft: rgba(255,255,255,0.1) !important;
+}
+
+[class*="blue"], [class*="primary"] {
+    --tw-ring-color: #71717a !important;
+}
+
+.svelte-1f354aw, .border-orange-500, [style*="border-color: rgb(249"] {
+    border-color: #3f3f46 !important;
 }
 
 /* Examples styling */
@@ -630,6 +676,81 @@ footer { display: none !important; }
     .diagnostic-wrapper { padding: 32px 16px; }
     .about-wrapper { padding: 32px 16px; }
 }
+
+/* ===== FORCE REMOVE ALL BLUE ===== */
+* {
+    --primary-50: #fafafa !important;
+    --primary-100: #f5f5f5 !important;
+    --primary-200: #e5e5e5 !important;
+    --primary-300: #d4d4d4 !important;
+    --primary-400: #a3a3a3 !important;
+    --primary-500: #737373 !important;
+    --primary-600: #525252 !important;
+    --primary-700: #404040 !important;
+    --primary-800: #262626 !important;
+    --primary-900: #171717 !important;
+}
+
+.gradio-container,
+.gradio-container * {
+    --checkbox-background-color-selected: #525252 !important;
+    --button-primary-background-fill: #fafafa !important;
+    --button-primary-background-fill-hover: #e5e5e5 !important;
+    --button-primary-text-color: #0a0a0a !important;
+    --slider-color: #fafafa !important;
+    --block-label-text-color: #a3a3a3 !important;
+    --body-text-color: #fafafa !important;
+    --color-accent: #fafafa !important;
+    --link-text-color: #fafafa !important;
+    --link-text-color-hover: #d4d4d4 !important;
+}
+
+/* Examples gallery fix */
+.gallery, .grid-wrap, .thumbnail-item {
+    background: var(--bg-subtle) !important;
+}
+
+.gallery img, .thumbnail-item img {
+    border-radius: 6px !important;
+    cursor: pointer !important;
+}
+
+/* Label styling */
+.label-wrap, .output-label {
+    background: var(--bg-subtle) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+}
+
+.label-wrap .text, .confidence-bar {
+    background: linear-gradient(90deg, #404040 0%, #262626 100%) !important;
+}
+
+/* Accordion styling */
+.accordion {
+    background: var(--bg-subtle) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+}
+
+.accordion-header {
+    background: transparent !important;
+    color: var(--text) !important;
+}
+
+/* Secondary buttons */
+.gradio-container button.secondary,
+.gradio-container button:not(.primary) {
+    background: var(--bg-muted) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+}
+
+.gradio-container button.secondary:hover,
+.gradio-container button:not(.primary):hover {
+    background: var(--bg-subtle) !important;
+    border-color: var(--text-muted) !important;
+}
 """
 
 # ============================================================
@@ -793,7 +914,11 @@ with gr.Blocks(
                     input_image = gr.Image(
                         type="pil",
                         label="Upload Image",
-                        height=300
+                        height=300,
+                        sources=["upload", "clipboard"],
+                        show_download_button=False,
+                        show_share_button=False,
+                        interactive=True
                     )
                     analyze_btn = gr.Button("Analyze", variant="primary", size="lg")
 
