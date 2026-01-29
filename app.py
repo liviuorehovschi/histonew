@@ -92,9 +92,25 @@ def run_analysis(img):
         return None, gr.update(visible=False)
     winner = max(preds, key=preds.get)
     conf = preds[winner]
-    # Show only diagnosis + confidence (no probability bars for all 3 classes)
     diagnosis_only = {winner: conf}
     return diagnosis_only, gr.update(visible=True)
+
+
+def _path_to_pil_for_preview(val):
+    """Ensure gr.Image receives a PIL image for display (not a string path). UI only."""
+    if val is None:
+        return None
+    if isinstance(val, Image.Image):
+        return val
+    path = val
+    if isinstance(val, dict):
+        path = val.get("path") or val.get("url")
+    if isinstance(path, str) and os.path.isfile(path):
+        try:
+            return Image.open(path).convert("RGB")
+        except Exception:
+            return None
+    return val
 
 # ============================================================
 # CSS
@@ -596,38 +612,47 @@ about_page = '''
 '''
 
 # ============================================================
-# APP
+# APP (all visible UI is defined inside this Blocks layout)
 # ============================================================
 with gr.Blocks(css=css, title="Histomancer") as demo:
     gr.HTML(header)
     gr.HTML(watermark)
 
+    # Navigation: Gradio Tabs (Home / Diagnostic / About)
     with gr.Tabs():
         with gr.Tab("Home"):
             gr.HTML(home_page)
 
         with gr.Tab("Diagnostic"):
-            gr.HTML('<div class="diag-header"><h1>Analyze Tissue</h1><p>Upload or select a sample image</p></div>')
+            gr.Markdown("## Analyze Tissue")
+            gr.Markdown("Upload an image or choose a sample below. **Preview appears here; analysis runs only when you press Analyze.**")
 
             with gr.Row():
-                with gr.Column():
-                    img_input = gr.Image(type="pil", label="Image", height=300, sources=["upload"])
+                with gr.Column(scale=1):
+                    img_input = gr.Image(type="pil", label="Image preview", height=300, sources=["upload"])
+                    # Convert path → PIL so preview always shows an image (no broken icon)
+                    img_input.change(_path_to_pil_for_preview, inputs=img_input, outputs=img_input)
 
-                    gr.Markdown("**Sample images** — example inputs only. Click to preview; click **Analyze** to run.")
-                    gr.Examples(
-                        examples=[[p] for p in SAMPLE_IMAGES],
-                        inputs=img_input,
-                    )
+                    gr.Markdown("---")
+                    gr.Markdown("**Sample images (playable demos)** — click one to load it in the preview above. Then press **Analyze** to run.")
+                    # Pass PIL images to Examples so gr.Image receives image objects, not paths
+                    _example_pils = []
+                    for _p in SAMPLE_IMAGES:
+                        if os.path.exists(_p):
+                            try:
+                                _example_pils.append([Image.open(_p).convert("RGB")])
+                            except Exception:
+                                pass
+                    if not _example_pils:
+                        _example_pils = [[_p] for _p in SAMPLE_IMAGES]
+                    gr.Examples(examples=_example_pils, inputs=img_input, label="Samples")
 
                     btn_analyze = gr.Button("Analyze", variant="primary")
 
-                with gr.Column():
+                with gr.Column(scale=1):
                     results = gr.Label(label="Diagnosis", num_top_classes=1)
-                    gr.HTML(
-                        '<p class="confidence-help" title="High confidence = model is more certain. Low confidence = uncertainty; consider further evaluation.">'
-                        '<span class="confidence-help-icon" aria-label="What does confidence mean?">ⓘ</span> '
-                        'Confidence is informational only — high values mean the model is more certain; low values suggest uncertainty.</p>'
-                    )
+                    gr.Markdown("*Confidence is informational only. High = more certain; low = uncertainty.*")
+                    # Grad-CAM and Saliency: hidden until AFTER analysis (only Analyze button runs analysis)
                     with gr.Column(visible=False) as viz_col:
                         gr.Markdown("**Explainability**")
                         with gr.Row():
@@ -637,14 +662,20 @@ with gr.Blocks(css=css, title="Histomancer") as demo:
                             out_gradcam = gr.Image(type="pil", label="Grad-CAM", height=200)
                             out_saliency = gr.Image(type="pil", label="Saliency", height=200)
 
-            gr.HTML('<div class="disclaimer">For research and education only. Not for clinical use.</div>')
+            gr.Markdown("---")
+            gr.Markdown("*For research and education only. Not for clinical use.*")
 
             btn_analyze.click(run_analysis, inputs=img_input, outputs=[results, viz_col])
             btn_gradcam.click(make_gradcam, inputs=img_input, outputs=out_gradcam)
             btn_saliency.click(make_saliency, inputs=img_input, outputs=out_saliency)
 
         with gr.Tab("About"):
-            gr.HTML(about_page)
+            gr.Markdown("## About Histomancer")
+            gr.Markdown("**What it does** — Classifies lung histopathology images into adenocarcinoma, squamous cell carcinoma, or normal tissue using deep learning.")
+            gr.Markdown("**Model** — EfficientNet B0. Input: 224×224 images. Explainability: Grad-CAM and saliency mapping.")
+            gr.Markdown("**Data** — LC25000 (~25k augmented images), LungHist700 (691 clinical samples).")
+            gr.Markdown("**Limitations** — Training data includes synthetic augmentation; not validated across institutions; for research and education only.")
+            gr.Markdown("**Author** — [Liviu Orehovschi](https://orehovschi.com) · [GitHub](https://github.com/liviuorehovschi) · [LinkedIn](https://linkedin.com/in/liviuorehovschi)")
 
 if __name__ == "__main__":
     demo.launch(server_name="0.0.0.0", server_port=7860)
