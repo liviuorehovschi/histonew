@@ -1,8 +1,17 @@
+import os
 import gradio as gr
 import numpy as np
 import tensorflow as tf
 import cv2
 from PIL import Image
+
+# Paths for sample images (work on HF and locally)
+_BASE = os.path.dirname(os.path.abspath(__file__))
+SAMPLE_IMAGES = [
+    os.path.join(_BASE, "test_images", "adenocarcinoma.jpg"),
+    os.path.join(_BASE, "test_images", "benign_tissue.png"),
+    os.path.join(_BASE, "test_images", "squamous_cell_carcinoma.png"),
+]
 
 # ============================================================
 # MODEL
@@ -78,7 +87,14 @@ def make_saliency(image):
 def run_analysis(img):
     if img is None:
         return None, gr.update(visible=False)
-    return predict(img), gr.update(visible=True)
+    preds = predict(img)
+    if not preds:
+        return None, gr.update(visible=False)
+    winner = max(preds, key=preds.get)
+    conf = preds[winner]
+    # Show only diagnosis + confidence (no probability bars for all 3 classes)
+    diagnosis_only = {winner: conf}
+    return diagnosis_only, gr.update(visible=True)
 
 # ============================================================
 # CSS
@@ -146,18 +162,19 @@ footer { display: none !important; }
     height: 32px;
 }
 
-/* Watermark */
+/* Signature watermark: persistent, bottom-right, clickable */
 #watermark {
     position: fixed;
     bottom: 20px;
     right: 20px;
     z-index: 9999;
-    opacity: 0.12;
+    opacity: 0.22;
     transition: opacity 0.3s ease;
+    cursor: pointer;
 }
 
 #watermark:hover {
-    opacity: 0.35;
+    opacity: 0.5;
 }
 
 /* Tabs */
@@ -167,32 +184,35 @@ footer { display: none !important; }
     border: none !important;
 }
 
+/* Nav: clean, aligned, recruiter-ready */
 .tab-nav {
     position: fixed !important;
     top: 60px !important;
     left: 0 !important;
     right: 0 !important;
-    background: rgba(0,0,0,0.9) !important;
+    background: rgba(0,0,0,0.92) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
     border-bottom: 1px solid rgba(255,255,255,0.1) !important;
     display: flex !important;
     justify-content: center !important;
-    gap: 4px !important;
-    padding: 12px 16px !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 14px 24px !important;
     z-index: 9998 !important;
 }
 
 .tab-nav button {
     background: transparent !important;
-    color: rgba(255,255,255,0.6) !important;
+    color: rgba(255,255,255,0.65) !important;
     border: none !important;
-    padding: 10px 24px !important;
-    font-size: 14px !important;
+    padding: 10px 28px !important;
+    font-size: 15px !important;
     font-weight: 500 !important;
-    border-radius: 6px !important;
+    letter-spacing: 0.02em !important;
+    border-radius: 8px !important;
     cursor: pointer !important;
-    transition: all 0.2s ease !important;
+    transition: color 0.2s ease, background 0.2s ease !important;
 }
 
 .tab-nav button:hover {
@@ -204,6 +224,11 @@ footer { display: none !important; }
     color: #000 !important;
     background: #fff !important;
     font-weight: 600 !important;
+}
+
+@media (max-width: 640px) {
+    .tab-nav { padding: 10px 12px !important; gap: 4px !important; }
+    .tab-nav button { padding: 8px 16px !important; font-size: 14px !important; }
 }
 
 /* Tab Content */
@@ -343,6 +368,19 @@ button.secondary, button:not(.primary) {
 
 button.secondary:hover, button:not(.primary):hover {
     background: rgba(255,255,255,0.12) !important;
+}
+
+/* Confidence interpretation (UX only, non-medical) */
+.confidence-help {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+.confidence-help-icon {
+    opacity: 0.8;
+    cursor: help;
 }
 
 /* Image component */
@@ -575,21 +613,21 @@ with gr.Blocks(css=css, title="Histomancer") as demo:
                 with gr.Column():
                     img_input = gr.Image(type="pil", label="Image", height=300, sources=["upload"])
 
-                    gr.Markdown("**Samples** (click to use)")
+                    gr.Markdown("**Sample images** — example inputs only. Click to preview; click **Analyze** to run.")
                     gr.Examples(
-                        examples=[
-                            "test_images/adenocarcinoma.jpg",
-                            "test_images/benign_tissue.png",
-                            "test_images/squamous_cell_carcinoma.png"
-                        ],
-                        inputs=img_input
+                        examples=[[p] for p in SAMPLE_IMAGES],
+                        inputs=img_input,
                     )
 
                     btn_analyze = gr.Button("Analyze", variant="primary")
 
                 with gr.Column():
-                    results = gr.Label(label="Results", num_top_classes=3)
-
+                    results = gr.Label(label="Diagnosis", num_top_classes=1)
+                    gr.HTML(
+                        '<p class="confidence-help" title="High confidence = model is more certain. Low confidence = uncertainty; consider further evaluation.">'
+                        '<span class="confidence-help-icon" aria-label="What does confidence mean?">ⓘ</span> '
+                        'Confidence is informational only — high values mean the model is more certain; low values suggest uncertainty.</p>'
+                    )
                     with gr.Column(visible=False) as viz_col:
                         gr.Markdown("**Explainability**")
                         with gr.Row():
